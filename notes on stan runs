@@ -1,0 +1,17 @@
+Notes on stan runs
+
+metareg.stan is fine when includding studies 3,4,5,6. 
+
+Adding trial one to this gives convergence problems.
+
+Adding trial two to this also gives convergence problems. 
+
+
+
+Suggest to me 
+
+
+Solution:
+
+Consdier allowing for random effects in slope terms to account for variation between arms
+Also consider allowing ror overispersion
