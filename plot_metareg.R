@@ -1,12 +1,12 @@
-load(file = '../../../../Desktop/overallmetareg.Rdata')
-library(ggplot2); library(reshape); library(bayesplot); library(ggpubr)
+load(file = '../../../../Desktop/model0.5HHCOVID_100k.Rdata')
+library(ggplot2); library(reshape); library(bayesplot); library(ggpubr); library(rstan)
 
 study_names = c("Aiello 2012", "Simmerman 2011", "Larson 2010", "Nicholson 2014", "Suess 2012", "Pandejpong 2012")
 params = c("c0", "b0", "b[1]","b[2]","b[3]","b[4]","b[5]","b[6]","c[1]","c[2]","c[3]","c[4]","c[5]" )
 params.hh = params[grep('b', params)]
 params.mask = params[grep('c', params)]
 
-overallextract<-extract(fit1, pars= params)#gives posterior values
+overallextract = rstan::extract(fit0.5, pars= params)#gives posterior values
 posterior = as.data.frame(matrix(unlist(overallextract), byrow = F, ncol = length(params)))
 colnames(posterior) = params
 
@@ -23,8 +23,8 @@ hh = mcmc_areas(post.hh, pars =  params.hh, prob = 0.8, prob_outer = 0.99) +
   theme(text = element_text(size=20))
 
 mask = mcmc_areas(post.mask, pars =  params.mask, prob = 0.8, prob_outer = 0.99) + 
-  scale_y_discrete(limits = rev(params.mask), 
-                   labels = rev(c('Overall mean', study_names[-6]))) +
+  scale_y_discrete(limits = rev(c(params.mask,'')), 
+                   labels = rev(c('Overall mean', study_names[-6], ''))) +
   scale_x_continuous(limits = c(-2, 2))+
   labs(title = 'Face mask')+
   xlab('')+
@@ -33,7 +33,7 @@ mask = mcmc_areas(post.mask, pars =  params.mask, prob = 0.8, prob_outer = 0.99)
 
 ggarrange(hh, mask)
 
-ggsave(filename = paste0('../../../../Desktop/metareg_posterior.jpeg'), width = 45, height = 20, units = 'cm')
+ggsave(filename = paste0('../../../../Desktop/metareg_posterior.jpeg'), width = 50, height = 20, units = 'cm')
 
 #### plot 80%CrI
 quants = c(0.025, 0.1, 0.5, 0.9, 0.975)
