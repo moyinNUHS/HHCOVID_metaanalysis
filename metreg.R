@@ -81,7 +81,7 @@ hh_trial_data <- list(
 )
 
 library(rstan)
-fit1 <- stan(
+fit0.3 <- stan(
   file = "metareg0.3.stan",  # Stan program
   data = hh_trial_data,    # named list of data
   chains = 2,             # number of Markov chains
@@ -96,12 +96,12 @@ fit1 <- stan(
 #plot(fit1, pars=c("a0", "b","c", "a[1]","a[2]","a[3]","a[4]","a[5]","a[6]" ))
 
 #plot(fit1, pars=c("b0", "b[1]","b[2]","b[3]","b[4]","b[5]","b[6]" ))
-plot(fit1, pars=c("c0", "b0", "b[1]","b[2]","b[3]","b[4]","b[5]","b[6]" ))
-plot(fit1, pars=c("c0", "b0", "b[1]","b[2]","b[3]","b[4]","b[5]","b[6]","c[1]","c[2]","c[3]","c[4]","c[5]" ))
+plot(fit0.3, pars=c("c0", "b0", "b[1]","b[2]","b[3]","b[4]","b[5]","b[6]" ))
+plot(fit0.3, pars=c("c0", "b0", "b[1]","b[2]","b[3]","b[4]","b[5]","b[6]","c[1]","c[2]","c[3]","c[4]","c[5]" ))
 
 
 
-fit3 <- stan(
+fit0.4 <- stan(
   file = "metareg0.4.stan",  # Stan program
   data = hh_trial_data,    # named list of data
   chains = 2,             # number of Markov chains
