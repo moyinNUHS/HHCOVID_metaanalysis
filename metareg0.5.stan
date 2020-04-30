@@ -1,13 +1,11 @@
 /**
-  Meta-regression analysis v.0.4
-  Changes from v0.3 is that we use a log binomial model instead of  logistic model for the binary outcomes
-  
-
+  Meta-regression analysis v.0.5
+  Changes from v0.4 is that we used person days at risk in the poison distributions instead of total number of patients right
 
 ***/
   data {
     int<lower=0> T;          // number of trials 
-    int<lower=0, upper=3> arms[T];               // number of arms
+    int<lower=0, upper=3> arms[T];  // number of arms
     int<lower=0, upper=1> binaryoutcome[T];  // 1 if outcome type is binary (trial participatnts infected or not , 0 otherwise meaning that people can be infected more than once)
     int cases[T,3];  // number of ARI cases
     int denoms[T,3];  // element [i,j] gives denominators for trial i arm j

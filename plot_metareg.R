@@ -1,15 +1,41 @@
 load(file = '../../../../Desktop/overallmetareg.Rdata')
-library(ggplot2); library(reshape)
+library(ggplot2); library(reshape); library(bayesplot); library(ggpubr)
 
-study_names<-c("Aiello 2012", "Simmerman 2011", "Larson 2010", "Nicholson 2014", "Suess 2012", "Pandejpong 2012")
+study_names = c("Aiello 2012", "Simmerman 2011", "Larson 2010", "Nicholson 2014", "Suess 2012", "Pandejpong 2012")
+params = c("c0", "b0", "b[1]","b[2]","b[3]","b[4]","b[5]","b[6]","c[1]","c[2]","c[3]","c[4]","c[5]" )
+params.hh = params[grep('b', params)]
+params.mask = params[grep('c', params)]
 
-overallextract<-extract(fit1, pars=c("c0", "b0", "b[1]","b[2]","b[3]","b[4]","b[5]","b[6]","c[1]","c[2]","c[3]","c[4]","c[5]" ))#gives posterior values
-rr = exp(unlist(overallextract))
-df <- data.frame(matrix(rr, nrow=lengths(overallextract)))
-colnames(df) = c("c0", "b0", "b[1]","b[2]","b[3]","b[4]","b[5]","b[6]","c[1]","c[2]","c[3]","c[4]","c[5]" )
+overallextract<-extract(fit1, pars= params)#gives posterior values
+posterior = as.data.frame(matrix(unlist(overallextract), byrow = F, ncol = length(params)))
+colnames(posterior) = params
 
-plot.df = df
+post.hh = posterior[, grep('b',colnames(posterior))]
+post.mask = posterior[, grep('c',colnames(posterior))]
 
+hh = mcmc_areas(post.hh, pars =  params.hh, prob = 0.8, prob_outer = 0.99) + 
+  scale_y_discrete(limits = rev(params.hh), 
+                   labels = rev(c('Overall mean', study_names))) +
+  scale_x_continuous(limits = c(-2, 2))+
+  labs(title = 'Hand hygiene')+
+  xlab('')+
+  theme_minimal()+
+  theme(text = element_text(size=20))
+
+mask = mcmc_areas(post.mask, pars =  params.mask, prob = 0.8, prob_outer = 0.99) + 
+  scale_y_discrete(limits = rev(params.mask), 
+                   labels = rev(c('Overall mean', study_names[-6]))) +
+  scale_x_continuous(limits = c(-2, 2))+
+  labs(title = 'Face mask')+
+  xlab('')+
+  theme_minimal()+
+  theme(text = element_text(size=20))
+
+ggarrange(hh, mask)
+
+ggsave(filename = paste0('../../../../Desktop/metareg_posterior.jpeg'), width = 45, height = 20, units = 'cm')
+
+#### plot 80%CrI
 quants = c(0.025, 0.1, 0.5, 0.9, 0.975)
 plotdf = as.data.frame(t(sapply(plot.df, quantile, probs = quants)))
 plotdf$para = rownames(plotdf)
@@ -67,7 +93,6 @@ ggplot(plotdf.f, aes(x = para, colour = type)) +
 ggsave(filename = paste0('../../../../Desktop/metareg.jpeg'), width = 20, height = 15, units = 'cm')
 
 
-
 #####compare to each trial 
 load(file = '../../../../Desktop/trial1.metareg.Rdata')
 load(file = '../../../../Desktop/trial2.metareg.Rdata')
@@ -113,6 +138,6 @@ ggplot(plotdf, aes(x = para)) +
   annotate('text', label = 'Posterior too low to show', x = 'c_trial4', y = -3) + 
   xlab('')+
   scale_x_discrete(limits = rev(c('b0', 'b[1]', 'b_trial1', 'b[2]','b_trial2','b[3]','b_trial3','b[4]','b_trial4','b[5]','b_trial5','b[6]','b_trial6',
-                              'c0', 'c[1]', 'c_trial1', 'c[2]','c_trial2','c[3]','c_trial3','c[4]','c_trial4','c[5]','c_trial5'))) +
+                                  'c0', 'c[1]', 'c_trial1', 'c[2]','c_trial2','c[3]','c_trial3','c[4]','c_trial4','c[5]','c_trial5'))) +
   coord_flip()+ 
   theme_minimal()

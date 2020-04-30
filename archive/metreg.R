@@ -1,10 +1,9 @@
-# R code for defining data for stan metaregression 
+# R code for running stan metaregression 
 # Studies in order are Aiello 2012, Simmerman 2011, Larson 2010, Nicholson 2014, Suess 2012, Pandejpong 2012
 # use -99 for NA (as NA not allowed in Stan)
 study_names<-c("Aiello 2012", "Simmerman 2011", "Larson 2010", "Nicholson 2014", "Suess 2012", "Pandejpong 2012")
 
 baseline_hand_washing_freq<-4 # assumed number of handwashes  with soap and to use when not reported (based on Simmerman)
-
 
 #https://blogs.scientificamerican.com/plugged-in/the-benefits-of-a-bar-of-soap-that-is/
 #https://www.mcgill.ca/oss/article/health/liquid-or-bar-soapy-tales
@@ -54,7 +53,6 @@ mask_intervention_arm2<-c(1,0,0,0,1,0)
 mask_intervention_arm3<-c(1,1,1,0,1,0)
 
 
-
 #case_data<-array(data=c(10, 12, 6, 7,0,0),dim = c(2,3))
 case_data<-array(data=c(case_data_control_arm,case_data_arm2,case_data_arm3),dim = c(6,3))
 # denom_data<-array(data=c(100, 101, 99, 102,0,0),dim = c(2,3))
@@ -63,17 +61,6 @@ hhfreq <- array(data=c(hhfreq_control,hhfreq_arm2,hhfreq_arm3),dim = c(6, 3))
 
 maskhrs <- array(data=c(maskhrs_control,maskhrs_arm2,maskhrs_arm3),dim = c(6,3))
 
-hh_trial_data <- list(
-  T = 6,
-  arms = num_arms,
-  cases = case_data,
-  denoms = denom_data,
-  hhfreq=hhfreq,
-  maskhrs=maskhrs,
-  binaryoutcome=!multiple_outcomes_per_person,
-  followupdays=follow_up_time_days,
-  pdaysatrisk_arm1=person_days_at_risk_control_arm,
-  pdaysatrisk_arm2=person_days_at_risk_arm2,
-  pdaysatrisk_arm3=person_days_at_risk_arm3
-  
-)
+
+
+
