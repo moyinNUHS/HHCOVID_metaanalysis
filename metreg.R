@@ -4,7 +4,7 @@
 study_names<-c("Aiello 2012", "Simmerman 2011", "Larson 2010", "Nicholson 2014", "Suess 2012", "Pandejpong 2012")
 
 baseline_hand_washing_freq<-4 # assumed number of handwashes  with soap and to use when not reported (based on Simmerman)
-
+assumed_mask_hrs<-2 # assumed number of mask hours per day in mask arm if not reported
 
 # Calculation for frequency of hand washes per day for Nicholson study
 # The following sources
@@ -25,8 +25,8 @@ Nicholson_hw_per_day_control<-((45/7)/5.8)/.35
 Nicholson_hw_per_day_arm2<-((235/7)/5.7)/.35
 # For Suess - little bit unclear on hand hygiene frequency though some data
 
-assumed_mask_hrs<-2 # assumed number of mask hours per day in mask arm if not reported
 
+no_value<- -99
 num_arms<-c(3,3,3,2,3,3)
 index_case_based_recruitment<-c(0,1,0,0,1,0)
 multiple_outcomes_per_person<-c(0,0,1,1,0, 1)
@@ -34,11 +34,11 @@ follow_up_time_days<-c(42,21,389,287,8,84)
 
 num_individuals_control_arm<-c(370,302,904,4812,82,540)
 num_individuals_arm2<-c(392,292,946,4863,69, 452)
-num_individuals_arm3<-c(349,291, 938,-99, 67, 449)
+num_individuals_arm3<-c(349,291, 938,no_value, 67, 449)
 
-person_days_at_risk_control_arm<-c(-99, -99, 46526*7, 1289616, -99, 538 *84)
+person_days_at_risk_control_arm<-c(no_value, no_value, 46526*7, 1289616, no_value, 538 *84)
 person_days_at_risk_arm2<-c(-99,-99,48731*7, 1302311,-99,452*84)
-person_days_at_risk_arm3<-c(-99,-99,50676*7, -99, -99, 447*84)
+person_days_at_risk_arm3<-c(-99,-99,50676*7, no_value, no_value, 447*84)
 
 case_data_control_arm<-c(51,26,1646,20526, 14, 644)
 case_data_arm2<-c(46,50,1416,18432, 6, 438 )
@@ -46,7 +46,7 @@ case_data_arm3<-c(31,51, 1972,-99,6, 501)
 
 hhfreq_control<-c(5.93+1.51, 3.9, baseline_hand_washing_freq, Nicholson_hw_per_day_control, 1+baseline_hand_washing_freq )
 hhfreq_arm2<-c(5.81+1.29, 4.7, baseline_hand_washing_freq+5.7, Nicholson_hw_per_day_arm2, 4, 6+baseline_hand_washing_freq )
-hhfreq_arm3<-c(5.58+4.49, 4.9, baseline_hand_washing_freq+5.5, -99,-99,4, 3+baseline_hand_washing_freq)
+hhfreq_arm3<-c(5.58+4.49, 4.9, baseline_hand_washing_freq+5.5, no_value, no_value, 4, 3+baseline_hand_washing_freq)
 
 maskhrs_control<-c(0,0,0,0,0,0)
 maskhrs_arm2<-c(5.04,0,0,0,4.2,0)
@@ -68,8 +68,8 @@ maskhrs <- array(data=c(maskhrs_control,maskhrs_arm2,maskhrs_arm3),dim = c(6,3))
 
 hh_trial_data <- list(
   T = 6,
-  arms = num_arms,
-  binaryoutcome=!multiple_outcomes_per_person,
+  # arms = num_arms,
+  # binaryoutcome=!multiple_outcomes_per_person,
   cases = case_data,
   denoms = denom_data,
   followupdays=follow_up_time_days,
@@ -93,7 +93,10 @@ fit1 <- stan(
   control = list(max_treedepth = 15, adapt_delta=0.8)
 )
 
+# Plot parameters for hand washing
 plot(fit1, pars=c("c0", "b0", "b[1]","b[2]","b[3]","b[4]","b[5]","b[6]" ))
+# Plot parameters for hand washing and masks
 plot(fit1, pars=c("c0", "b0", "b[1]","b[2]","b[3]","b[4]","b[5]","b[6]","c[1]","c[2]","c[3]","c[4]","c[5]" ))
 
+# Save output parameters
 write.table(summary(fit1)$summary, file="summary.csv",sep=",")

@@ -6,8 +6,8 @@
 
 data {
     int<lower=0> T;                           // number of trials 
-    int<lower=0, upper=3> arms[T];            // number of arms
-    int<lower=0, upper=1> binaryoutcome[T];   // 1 if outcome type is binary (trial participatnts infected or not, 0 otherwise meaning that people can be infected more than once)
+    //int<lower=0, upper=3> arms[T];            // number of arms
+    //int<lower=0, upper=1> binaryoutcome[T];   // 1 if outcome type is binary (trial participatnts infected or not, 0 otherwise meaning that people can be infected more than once)
     int cases[T,3];                           // number of ARI cases
     int denoms[T,3];                          // element [i,j] gives denominators for trial i arm j
     int followupdays[T];                      // number of days individuals were followed up for
@@ -35,6 +35,7 @@ transformed parameters {
   real sigma_a = sqrt(sigmasq_a);
   real sigma_b = sqrt(sigmasq_b);
   real sigma_c = sqrt(sigmasq_c);
+  
   // Probability of outcome per day
   real p1_1;  //trial one arm 1 
   real p1_2;  //trial one arm 2
@@ -54,10 +55,6 @@ transformed parameters {
   real p6_2;  //trial six arm 2
   real p6_3;  //trial six arm 3
   
-  // Relative risk 
-  real RR_handwashing;  
-  real RR_masks;  
-  
   // Probability of outcome over followup period
   real pi1_1;   
   real pi1_2;
@@ -72,8 +69,9 @@ transformed parameters {
   real pi5_2;
   real pi5_3;
   
-  RR_handwashing = exp(b0);  
-  RR_masks=exp(c0);  
+  // Relative risk 
+  real RR_handwashing = exp(b0);  
+  real RR_masks=exp(c0);  
   
   p1_1 = exp(a[1] + b[1]*hhfreq[1,1] + c[1]*maskhrs[1,1] );
   p1_2 = exp(a[1] + b[1]*hhfreq[1,2] + c[1]*maskhrs[1,2] );
@@ -127,7 +125,7 @@ model {
   cases[4,1] ~ poisson(pdaysatrisk_arm1[4]*p4_1);
   cases[4,2] ~ poisson(pdaysatrisk_arm1[4]*p4_2);
   
-  cases[5,1] ~ binomial(denoms[5,1],pi5_1);
+  cases[5,1] ~ binomial(denoms[5,1], pi5_1);
   cases[5,2] ~ binomial(denoms[5,2], pi5_2);//
   cases[5,3] ~ binomial(denoms[5,3], pi5_3);
   
