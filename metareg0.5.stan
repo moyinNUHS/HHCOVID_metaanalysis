@@ -126,7 +126,7 @@ model {
   cases[4,2] ~ poisson(pdaysatrisk_arm1[4]*p4_2);
   
   cases[5,1] ~ binomial(denoms[5,1], pi5_1);
-  cases[5,2] ~ binomial(denoms[5,2], pi5_2);//
+  cases[5,2] ~ binomial(denoms[5,2], pi5_2);
   cases[5,3] ~ binomial(denoms[5,3], pi5_3);
   
   cases[6,1] ~ poisson(pdaysatrisk_arm1[6]*p6_1);
