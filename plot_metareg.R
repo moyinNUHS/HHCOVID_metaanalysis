@@ -1,3 +1,5 @@
+####plot predicted and observed data 
+
 load(file = '../../../../Desktop/model0.5HHCOVID_100k.Rdata')
 library(ggplot2); library(reshape); library(bayesplot); library(ggpubr); library(rstan)
 
