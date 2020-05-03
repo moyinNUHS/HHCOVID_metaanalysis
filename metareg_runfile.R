@@ -13,13 +13,18 @@ fit0.5 <- stan(
   control = list(max_treedepth = 15,adapt_delta=0.8)
 )
 
-params = c("c0", "b0", "b[1]","b[2]","b[3]","b[4]","b[5]","b[6]","c[1]","c[2]","c[3]","c[4]","c[5]" )
+params = c("c0", "b0", "b[1]","b[2]","b[3]","b[4]","b[5]","b[6]","c[1]","c[2]","c[3]","c[4]","c[5]","RR_handwashing", "RR_masks")
 
-summary(fit0.5, pars = params)
-traceplot(fit0.5, pars = params)
+# Plot parameters for hand washing and masks
 plot(fit0.5, pars = params)
+# Print relative risk for handwashing and masks
+print(fit1, pars=c("RR_handwashing", "RR_masks"))
+
+summary(fit0.5, pars = params)$summary
+traceplot(fit0.5, pars = params)
+
+# Save output parameters
+write.table(summary(fit1)$summary, file="summary.csv",sep=",")
 
 save(fit0.5, file='../../../../Desktop/model0.5HHCOVID.Rdata')
-
-
 
