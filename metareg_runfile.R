@@ -10,7 +10,7 @@ fit0.5 <- stan(
   iter = 500000,             # total number of iterations per chain
   cores = 4,                 # number of cores (could use one per chain)
   refresh = 1000,            # no of runs at which progress is shown
-  control = list(max_treedepth = 15, adapt_delta=0.8)
+  control = list(max_treedepth = 15, adapt_delta=0.99)
 )
 
 params = c("c0", "b0", "b[1]","b[2]","b[3]","b[4]","b[5]","b[6]","c[1]","c[2]","c[3]","c[4]","c[5]","RR_handwashing", "RR_masks")
