@@ -33,9 +33,9 @@ Simmerman_maskhrs_per_day_arm2 <- 0
 Simmerman_maskhrs_per_day_arm3 <- 211/60
 
 # Larson 2010: HH (alcohol hand rub)
-Larson_hw_per_day_control <- 4
-Larson_hw_per_day_arm2 <- 9.7
-Larson_hw_per_day_arm3 <- 9.5
+Larson_hw_per_day_control <- baseline_hand_washing_freq
+Larson_hw_per_day_arm2 <- 5.7 + baseline_hand_washing_freq
+Larson_hw_per_day_arm3 <- 5.5 + baseline_hand_washing_freq
 
 Larson_maskhrs_per_day_control <- 0
 Larson_maskhrs_per_day_arm2 <- 0
@@ -69,9 +69,9 @@ Nicholson_maskhrs_per_day_arm3 <- 0
 
 # Suess 2012: HH (alcohol hand rub)
 # For Suess - little bit unclear on hand hygiene frequency though some data
-Suess_hw_per_day_control <- 1
-Suess_hw_per_day_arm2 <- 4
-Suess_hw_per_day_arm3 <- 4
+Suess_hw_per_day_control <- 1 + baseline_hand_washing_freq
+Suess_hw_per_day_arm2 <- 4 + baseline_hand_washing_freq
+Suess_hw_per_day_arm3 <- 4 + baseline_hand_washing_freq
 
 Suess_maskhrs_per_day_control <- 0
 Suess_maskhrs_per_day_arm2 <- 4.2
