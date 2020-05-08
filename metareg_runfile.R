@@ -5,10 +5,10 @@ source('metareg_define_data.R')
 fit0.5 <- stan(
   file = "metareg0.5.stan",  # Input model version here 
   data = hh_trial_data,      # named list of data defined in metareg_define_data.R
-  chains = 4,                # number of Markov chains
+  chains = 2,                # number of Markov chains
   warmup = 1000,             # number of warmup iterations per chain
-  iter = 500000,             # total number of iterations per chain
-  cores = 4,                 # number of cores (could use one per chain)
+  iter = 100000,             # total number of iterations per chain
+  cores = 2,                 # number of cores (could use one per chain)
   refresh = 1000,            # no of runs at which progress is shown
   control = list(max_treedepth = 15, adapt_delta=0.99)
 )

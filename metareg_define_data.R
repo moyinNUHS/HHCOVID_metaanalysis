@@ -10,6 +10,7 @@ study_names_short <- c("Aiello","Simmerman","Larson","Nicholson","Suess","Pandje
 baseline_hand_washing_freq<-4 # assumed number of handwashes  with soap and to use when not reported (based on Simmerman)
 assumed_mask_hrs<-2 # assumed number of mask hours per day in mask arm if not reported
 no_value<- -99
+soap_per_handwash <- 0.35
 
 # arm2 = mask or hand hygiene intervention 
 # arm3 = combination of mask or hand hygiene
@@ -33,9 +34,9 @@ Simmerman_maskhrs_per_day_arm2 <- 0
 Simmerman_maskhrs_per_day_arm3 <- 211/60
 
 # Larson 2010: HH (alcohol hand rub)
-Larson_hw_per_day_control <- 4
-Larson_hw_per_day_arm2 <- 9.7
-Larson_hw_per_day_arm3 <- 9.5
+Larson_hw_per_day_control <- baseline_hand_washing_freq
+Larson_hw_per_day_arm2 <- 5.7 + baseline_hand_washing_freq
+Larson_hw_per_day_arm3 <- 5.5 + baseline_hand_washing_freq
 
 Larson_maskhrs_per_day_control <- 0
 Larson_maskhrs_per_day_arm2 <- 0
@@ -59,8 +60,8 @@ Larson_maskhrs_per_day_arm3 <- 2
   # 1.1/0.35 = 3.2 handwashes per day (control)
   # 5.9/0.35 = 16.8 in intervention arm
 }
-Nicholson_hw_per_day_control <- ((45/7)/5.8)/.35
-Nicholson_hw_per_day_arm2 <- ((235/7)/5.7)/.35
+Nicholson_hw_per_day_control <- ((45/7)/5.8)/soap_per_handwash
+Nicholson_hw_per_day_arm2 <- ((235/7)/5.7)/soap_per_handwash
 Nicholson_hw_per_day_arm3 <- no_value
 
 Nicholson_maskhrs_per_day_control <- 0
@@ -69,9 +70,9 @@ Nicholson_maskhrs_per_day_arm3 <- 0
 
 # Suess 2012: HH (alcohol hand rub)
 # For Suess - little bit unclear on hand hygiene frequency though some data
-Suess_hw_per_day_control <- 1
-Suess_hw_per_day_arm2 <- 4
-Suess_hw_per_day_arm3 <- 4
+Suess_hw_per_day_control <- 1 + baseline_hand_washing_freq
+Suess_hw_per_day_arm2 <- 4 + baseline_hand_washing_freq
+Suess_hw_per_day_arm3 <- 4 + baseline_hand_washing_freq
 
 Suess_maskhrs_per_day_control <- 0
 Suess_maskhrs_per_day_arm2 <- 4.2
