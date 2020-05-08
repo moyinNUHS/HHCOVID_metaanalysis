@@ -10,7 +10,8 @@ study_names_short <- c("Aiello","Simmerman","Larson","Nicholson","Suess","Pandje
 baseline_hand_washing_freq<-4 # assumed number of handwashes  with soap and to use when not reported (based on Simmerman)
 assumed_mask_hrs<-2 # assumed number of mask hours per day in mask arm if not reported
 no_value<- -99
-soap_per_handwash <- 0.35
+soap_per_handwash <- 0.35 # Nicholson
+ml_per_wash <- 2 # Larson
 
 # arm2 = mask or hand hygiene intervention 
 # arm3 = combination of mask or hand hygiene
@@ -34,13 +35,15 @@ Simmerman_maskhrs_per_day_arm2 <- 0
 Simmerman_maskhrs_per_day_arm3 <- 211/60
 
 # Larson 2010: HH (alcohol hand rub)
+freq_hh_group <- (343.8/30)/ml_per_wash
+freq_hhmask_group <- (329.6/30)/ml_per_wash
 Larson_hw_per_day_control <- baseline_hand_washing_freq
-Larson_hw_per_day_arm2 <- 5.7 + baseline_hand_washing_freq
-Larson_hw_per_day_arm3 <- 5.5 + baseline_hand_washing_freq
+Larson_hw_per_day_arm2 <- freq_hh_group + baseline_hand_washing_freq
+Larson_hw_per_day_arm3 <- freq_hhmask_group + baseline_hand_washing_freq
 
 Larson_maskhrs_per_day_control <- 0
 Larson_maskhrs_per_day_arm2 <- 0
-Larson_maskhrs_per_day_arm3 <- 2
+Larson_maskhrs_per_day_arm3 <- assumed_mask_hrs
 
 # Nicholson 2014: HH (soap bars)
 {
