@@ -2,13 +2,13 @@
 library(rstan)
 source('metareg_define_data.R')
 
-fit0.5 <- stan(
-  file = "metareg0.5.stan",  # Input model version here 
+fit0.9 <- stan(
+  file = "metareg0.9b.stan",  # Input model version here 
   data = hh_trial_data,      # named list of data defined in metareg_define_data.R
-  chains = 2,                # number of Markov chains
+  chains = 4,                # number of Markov chains
   warmup = 1000,             # number of warmup iterations per chain
   iter = 200000,             # total number of iterations per chain
-  cores = 2,                 # number of cores (could use one per chain)
+  cores = 4,                 # number of cores (could use one per chain)
   refresh = 1000,            # no of runs at which progress is shown
   control = list(max_treedepth = 15, adapt_delta=0.99)
 )
@@ -20,16 +20,16 @@ suffix <- "2chains_08052020_LarsonLower"
 
 # Plot parameters for hand washing and masks
 pdf(paste0("plot_",suffix,".pdf"),width=12,height=9)
-plot(fit0.5, pars = params)
+plot(fit0.9, pars = params)
 dev.off()
 # Print relative risk for handwashing and masks
-print(fit0.5, pars=c("RR_handwashing", "RR_masks"))
+print(fit0.9, pars=c("RR_handwashing", "RR_masks"))
 
-summary(fit0.5, pars = params)$summary
-traceplot(fit0.5, pars = params)
+summary(fit0.9, pars = params)$summary
+traceplot(fit0.9, pars = params)
 
 # Save output parameters
-write.table(summary(fit0.5)$summary, file=paste0("summary_",suffix,".csv"),sep=",")
-save(fit0.5, file=paste0("model0.5HHCOVID_", suffix, ".Rdata")) 
+write.table(summary(fit0.9)$summary, file=paste0("summary_",suffix,".csv"),sep=",")
+save(fit0.9, file=paste0("model0.5HHCOVID_", suffix, ".Rdata")) 
 
 
