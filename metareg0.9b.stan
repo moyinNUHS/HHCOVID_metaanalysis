@@ -58,7 +58,7 @@ transformed parameters {
   real p6_2;  //trial six arm 2
   real p6_3;  //trial six arm 3
   
-  // Probabilities of outcome over follow up period 
+  // Probabilities of outcome over FOLLOW UP PERIOD
   
   // For Aiello 2012 (trial 1), Simmerman 2011(trial 2), Suess 2012(trial 5),  
   // these trials reported only one outcome per participant. 
@@ -93,9 +93,9 @@ transformed parameters {
   pi2_2 = 1-(1-p2_2)^followupdays[2];
   pi2_3 = 1-(1-p2_3)^followupdays[2];
   
-  p5_1 = inv_logit(a[5] + b[5]*hhfreq[5,1] + c[5]*maskhrs[5,1] );
-  p5_2 = inv_logit(a[5] + b[5]*hhfreq[5,2] + c[5]*maskhrs[5,2] );
-  p5_3 = inv_logit(a[5] + b[5]*hhfreq[5,3] + c[5]*maskhrs[5,3] );
+  p5_1 = exp(a[5] + b[5]*hhfreq[5,1] + c[5]*maskhrs[5,1] );
+  p5_2 = exp(a[5] + b[5]*hhfreq[5,2] + c[5]*maskhrs[5,2] );
+  p5_3 = exp(a[5] + b[5]*hhfreq[5,3] + c[5]*maskhrs[5,3] );
   
   pi5_1 = 1-(1-p5_1)^followupdays[5];
   pi5_2 = 1-(1-p5_2)^followupdays[5];
@@ -113,9 +113,9 @@ transformed parameters {
   p4_1 = inv_logit(a[4] + b[4]*hhfreq[4,1] + c[4]*maskhrs[4,1] );
   p4_2 = inv_logit(a[4] + b[4]*hhfreq[4,2] + c[4]*maskhrs[4,2] );
   
-  p6_1 = exp(a[6] + b[6]*hhfreq[6,1]);
-  p6_2 = exp(a[6] + b[6]*hhfreq[6,2]);
-  p6_3 = exp(a[6] + b[6]*hhfreq[6,3]);
+  p6_1 = inv_logit(a[6] + b[6]*hhfreq[6,1]);
+  p6_2 = inv_logit(a[6] + b[6]*hhfreq[6,2]);
+  p6_3 = inv_logit(a[6] + b[6]*hhfreq[6,3]);
 }
 
 model { 
@@ -170,5 +170,5 @@ generated quantities {
   // Relative risk 
   real RR_handwashing = exp(b0);  
   real RR_masks = exp(c0);  
-
+  
 }  
