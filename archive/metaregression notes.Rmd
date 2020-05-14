@@ -1,0 +1,81 @@
+---
+title: "Meta-regression analysis of the impact of hand hygiene"
+output: html_notebook
+---
+Random effects metaregression on all the data. 
+This allows for random intercepts and also for effectiveness of interventions (hand hygiene and maks use) to vary between the studies (but not between arms within the studies). This seems reasonable as hand hygiene implementation (soap or sanitizer and training) and study populations vary considerably. 
+
+Analysis of full data
+
+```{r}
+source("metareg_define_data.R")    # define data 
+require(rstan)
+
+fit1 <- stan(
+  file = "metareg0.3.stan",  # Stan program
+  data = hh_trial_data,    # named list of data
+  chains = 2,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 100000,            # total number of iterations per chain
+  cores = 2,              # number of cores (could use one per chain)
+  refresh = 1000,             # no progress shown
+  control = list(max_treedepth = 15,adapt_delta=0.8)
+)
+summary(fit1)
+plot(fit1, pars=c("c0", "b0", "b[1]","b[2]","b[3]","b[4]","b[5]","b[6]","c[1]","c[2]","c[3]","c[4]","c[5]" ))
+```
+
+```{r}
+plot(fit1, pars=c("c0", "b0", "b[1]","b[2]","b[3]","b[4]","b[5]","b[6]","c[1]","c[2]","c[3]","c[4]","c[5]" ))
+```
+
+
+
+Analysis of full data excluding Simmerman study (trial 2), which seems to be something of an outlier. 
+
+```{r}
+source("metareg_define_data.R")    # define data 
+require(rstan)
+
+fit2 <- stan(
+  file = "metareg0.3.no.study.2.stan",  # Stan program
+  data = hh_trial_data,    # named list of data
+  chains = 2,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 100000,            # total number of iterations per chain
+  cores = 2,              # number of cores (could use one per chain)
+  refresh = 1000,             # no progress shown
+  control = list(max_treedepth = 15,adapt_delta=0.8)
+)
+summary(fit2)
+
+```
+
+```{r}
+plot(fit2, pars=c("c0", "b0", "b[1]","b[2]","b[3]","b[4]","b[5]","b[6]","c[1]","c[2]","c[3]","c[4]","c[5]" ))
+```
+Next run model metareg0.4.stan that uses a log link for the binomial regression so that everything is on the same scale and we 
+get risk ratios rather than odds ratios
+
+
+```{r}
+fit4 <- stan(
+  file = "metareg0.4.stan",  # Stan program
+  data = hh_trial_data,    # named list of data
+  chains = 2,             # number of Markov chains
+  warmup = 1000,          # number of warmup iterations per chain
+  iter = 100000,            # total number of iterations per chain
+  cores = 2,              # number of cores (could use one per chain)
+  refresh = 1000,             # no progress shown
+  control = list(max_treedepth = 15,adapt_delta=0.8)
+)
+summary(fit4)
+```
+
+```{r}
+plot(fit4, pars=c("c0", "b0", "b[1]","b[2]","b[3]","b[4]","b[5]","b[6]","c[1]","c[2]","c[3]","c[4]","c[5]" ))
+```
+
+
+
+

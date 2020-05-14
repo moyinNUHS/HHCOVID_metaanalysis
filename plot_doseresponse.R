@@ -77,10 +77,10 @@ ribcol = c(alpha('grey', alph*0.3),
 ggplot() + 
   geom_ribbon(aes(x = hhfreq, ymin = pred_mean0.1, ymax = pred_mean0.9), data = d.plot.predict, fill = ribcol[1])+
   geom_ribbon(aes(x = hhfreq, ymin = pred_mean0.25, ymax = pred_mean0.75), data = d.plot.predict, fill = ribcol[2])+
-  geom_point(aes(x = hhfreq, y = `50%`, color = trial.names, shape = as.factor(trial.arms), size = 1/(`90%` -  `10%`)), data = df.trial) +
+  geom_point(aes(x = hhfreq, y = `50%`, color = trial.names,  size = 1/(`90%` -  `10%`)), data = df.trial) +
   geom_line(aes(x = hhfreq, y = pred_mean0.5), data = d.plot.predict, color='grey40') +
   scale_color_manual(values = cols) +
-  scale_shape_manual(values = c(19, 1, 10, 3), label = c('Control', 'Hand hygiene and mask', 'Hand hygiene', 'Mask')) + 
+  scale_shape_manual(values = c(19, 1, 10, 3), label = c('Control', 'Hand hygiene', 'Hand hygiene and mask', 'Mask')) + 
   scale_y_continuous(limits = c(0, 0.02)) + 
   scale_x_continuous(limits = c(0, 18))+ 
   scale_size(guide = 'none')+
@@ -89,8 +89,7 @@ ggplot() +
   theme_minimal()+
   theme(legend.position = 'bottom', 
         legend.title = element_blank())+
-  guides(color = guide_legend(nrow = 2), 
-         shape = guide_legend(nrow = 2))
+  guides(color = guide_legend(nrow = 1))
 
 ggsave(paste0('../../../../Desktop/dose_response_COVIDHH.jpeg'), units = 'cm', width = 30, height= 15)
 
