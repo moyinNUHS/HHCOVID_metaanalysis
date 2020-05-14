@@ -6,7 +6,7 @@ library(rstan)
 source('metareg_define_data.R')
 
 fit0.9 <- stan(
-  file = "metareg0.9b.stan",  # Input model version here 
+  file = "metareg0.9.stan",  # Input model version here 
   data = hh_trial_data,       # named list of data defined in metareg_define_data.R
   chains = 4,                 # number of Markov chains
   warmup = 1000,              # number of warmup iterations per chain

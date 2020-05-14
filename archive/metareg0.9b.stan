@@ -1,10 +1,10 @@
 //=========================================================================== //
-//                       Meta-regression analysis v.0.9 
+//                       Meta-regression analysis v.0.9b
 // More accommodating priors for a0, b0, c0 [normal(0, 10)]
 // Also adds a new "generated quantities " block to produce predicted probabilities 
 // of become infected per day as a function of hand hygiene. 
 // To avoid predicting probabilities greater than one all these probabilities are now related to 
-// control measusres with a logit link, so we are outputting odds ratios rather than risk ratios,
+// control measures with a logit link, so we are outputting odds ratios rather than risk ratios,
 // but since probabilities are small they will be almost the same.
 
 // previous versions can be found in archive folder 
