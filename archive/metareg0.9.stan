@@ -1,9 +1,11 @@
 //=========================================================================== //
-//                            Meta-regression analysis 
+//                       Meta-regression analysis v.0.9 
 // More accommodating priors for a0, b0, c0 [normal(0, 10)]
 // Also adds a new "generated quantities " block to produce predicted probabilities 
 // of become infected per day as a function of hand hygiene. 
-// v 0.0b uses a log link instead of the logit link 0.9 uses
+// To avoid predicting probabilities greater than one all these probabilities are now related to 
+// control measusres with a logit link, so we are outputting odds ratios rather than risk ratios,
+// but since probabilities are small they will be almost the same.
 
 // previous versions can be found in archive folder 
 //=========================================================================== //
@@ -11,11 +13,11 @@
 # Data taken from the metareg_define_data.R file 
 data {
   int<lower=0> T;                           // number of trials 
-  int cases[T, 3];                          // number of outcomes (upper respiratory tract infection symptoms) reported
-  int denoms[T, 3];                         // element [i,j] gives denominators for trial i arm j
+  int cases[T,3];                           // number of outcomes (upper respiratory tract infection symptoms) reported
+  int denoms[T,3];                          // element [i,j] gives denominators for trial i arm j
   int followupdays[T];                      // number of days individuals were followed up for
-  real hhfreq[T, 3];                        // hand hygiene frequency is for trial i arm j
-  real maskhrs[T, 3];                       // daily mask hours for trial i arm j
+  real hhfreq[T,3];                         // hand hygiene frequency is for trial i arm j
+  real maskhrs[T,3];                        // daily mask hours for trial i arm j
   int pdaysatrisk_arm1[T];                  // person days at risk in the control arm (arm 1)
   int pdaysatrisk_arm2[T];                  // person days at risk in arm 2
   int pdaysatrisk_arm3[T];                  // person days at risk in arm 3
@@ -77,25 +79,25 @@ transformed parameters {
   real pi5_2;
   real pi5_3;
   
-  p1_1 = exp(a[1] + b[1]*hhfreq[1,1] + c[1]*maskhrs[1,1] );
-  p1_2 = exp(a[1] + b[1]*hhfreq[1,2] + c[1]*maskhrs[1,2] );
-  p1_3 = exp(a[1] + b[1]*hhfreq[1,3] + c[1]*maskhrs[1,3] );
+  p1_1 = inv_logit(a[1] + b[1]*hhfreq[1,1] + c[1]*maskhrs[1,1] );
+  p1_2 = inv_logit(a[1] + b[1]*hhfreq[1,2] + c[1]*maskhrs[1,2] );
+  p1_3 = inv_logit(a[1] + b[1]*hhfreq[1,3] + c[1]*maskhrs[1,3] );
   
   pi1_1 = 1-(1-p1_1)^followupdays[1];
   pi1_2 = 1-(1-p1_2)^followupdays[1];
   pi1_3 = 1-(1-p1_3)^followupdays[1];
   
-  p2_1 = exp(a[2] + b[2]*hhfreq[2,1] + c[2]*maskhrs[2,1] );
-  p2_2 = exp(a[2] + b[2]*hhfreq[2,2] + c[2]*maskhrs[2,2] );
-  p2_3 = exp(a[2] + b[2]*hhfreq[2,3] + c[2]*maskhrs[2,3] );
+  p2_1 = inv_logit(a[2] + b[2]*hhfreq[2,1] + c[2]*maskhrs[2,1] );
+  p2_2 = inv_logit(a[2] + b[2]*hhfreq[2,2] + c[2]*maskhrs[2,2] );
+  p2_3 = inv_logit(a[2] + b[2]*hhfreq[2,3] + c[2]*maskhrs[2,3] );
   
   pi2_1 = 1-(1-p2_1)^followupdays[2];
   pi2_2 = 1-(1-p2_2)^followupdays[2];
   pi2_3 = 1-(1-p2_3)^followupdays[2];
   
-  p5_1 = exp(a[5] + b[5]*hhfreq[5,1] + c[5]*maskhrs[5,1] );
-  p5_2 = exp(a[5] + b[5]*hhfreq[5,2] + c[5]*maskhrs[5,2] );
-  p5_3 = exp(a[5] + b[5]*hhfreq[5,3] + c[5]*maskhrs[5,3] );
+  p5_1 = inv_logit(a[5] + b[5]*hhfreq[5,1] + c[5]*maskhrs[5,1] );
+  p5_2 = inv_logit(a[5] + b[5]*hhfreq[5,2] + c[5]*maskhrs[5,2] );
+  p5_3 = inv_logit(a[5] + b[5]*hhfreq[5,3] + c[5]*maskhrs[5,3] );
   
   pi5_1 = 1-(1-p5_1)^followupdays[5];
   pi5_2 = 1-(1-p5_2)^followupdays[5];
@@ -106,16 +108,16 @@ transformed parameters {
   // Hence the probabilities of outcome during the follow up period 
   // can be directly obtained frome the models below
   
-  p3_1 = exp(a[3] + b[3]*hhfreq[3,1] + c[3]*maskhrs[3,1] );
-  p3_2 = exp(a[3] + b[3]*hhfreq[3,2] + c[3]*maskhrs[3,2] );
-  p3_3 = exp(a[3] + b[3]*hhfreq[3,3] + c[3]*maskhrs[3,3] );
+  p3_1 = inv_logit(a[3] + b[3]*hhfreq[3,1] + c[3]*maskhrs[3,1] );
+  p3_2 = inv_logit(a[3] + b[3]*hhfreq[3,2] + c[3]*maskhrs[3,2] );
+  p3_3 = inv_logit(a[3] + b[3]*hhfreq[3,3] + c[3]*maskhrs[3,3] );
   
-  p4_1 = exp(a[4] + b[4]*hhfreq[4,1] + c[4]*maskhrs[4,1] );
-  p4_2 = exp(a[4] + b[4]*hhfreq[4,2] + c[4]*maskhrs[4,2] );
+  p4_1 = inv_logit(a[4] + b[4]*hhfreq[4,1] + c[4]*maskhrs[4,1] );
+  p4_2 = inv_logit(a[4] + b[4]*hhfreq[4,2] + c[4]*maskhrs[4,2] );
   
-  p6_1 = exp(a[6] + b[6]*hhfreq[6,1]);
-  p6_2 = exp(a[6] + b[6]*hhfreq[6,2]);
-  p6_3 = exp(a[6] + b[6]*hhfreq[6,3]);
+  p6_1 = inv_logit(a[6] + b[6]*hhfreq[6,1]);
+  p6_2 = inv_logit(a[6] + b[6]*hhfreq[6,2]);
+  p6_3 = inv_logit(a[6] + b[6]*hhfreq[6,3]);
 }
 
 model { 
@@ -160,15 +162,30 @@ model {
   c ~ normal(c0, sigmasq_c );
   
   sigmasq_a ~ normal(0, 1); 
-  sigmasq_b ~ normal(0, 1); 
-  sigmasq_c ~ normal(0, 1); 
+  sigmasq_b ~  normal(0, 1); 
+  sigmasq_c ~  normal(0, 1); 
   
 }
 
 generated quantities {
   
   // Relative risk 
-  real RR_handwashing = exp(b0);  
-  real RR_masks = exp(c0);  
+  real OR_handwashing = exp(b0);  
+  real OR_masks = exp(c0);  
   
+  real a_new;
+  real b_new;
+  
+  real<lower=0, upper=1> predicted_mean[21];
+  real<lower=0, upper=1> predicted_mean_new_trial[21];
+  
+  a_new = normal_rng(a0, sigmasq_a );
+  b_new = normal_rng(b0, sigmasq_b );
+  
+  for (i in 1:21){
+    // calculate mean predicted probability of infection as a function of number of handwashes per day
+    predicted_mean[i] =  inv_logit(a0 + b0*i);
+    // now calculate mean predicted probability of infection for a new trial 
+    predicted_mean_new_trial[i]  = inv_logit(a_new + b_new*i);
+  }  
 }  
