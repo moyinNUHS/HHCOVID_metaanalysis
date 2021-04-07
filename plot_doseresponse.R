@@ -2,14 +2,14 @@
 # Plot dose-response curve from model output 
 # ========================================== #
 
-rm(list=ls()) # clear environmental 
+rm(list=ls()) # clear environment
 library(ggplot2); library(rstan) # load required libraries 
 
 ##############
 # Get data for plot
 
-# outputs from stan model 
-fit0.9 = readRDS("runs/fit0.9_5k.RDS")
+# outputs from stan model - main analysis 
+fit0.9 = readRDS("runs/fit0.9_5k_main.RDS")
 
 # parameter names 
 source('metareg_define_data.R') # Get hand hygiene frequency from data 
@@ -78,26 +78,24 @@ d.plot.predict$hhfreq = 0:(length(p1)-1)
 
 # colors for plots 
 cols = c("#52154ECC", "#0072B2CC", "#FFA500CC", "#EF5D60CC", "#83B692CC", "#7070D0CC")
-ribcol = c(alpha('grey', alph*0.3),
-           alpha('grey', alph*0.6))
+ribcol = c(alpha('grey', 0.3),
+           alpha('grey', 0.6))
 # plot
 ggplot() + 
-  geom_ribbon(aes(x = hhfreq, ymin = pred_mean0.1, ymax = pred_mean0.9), data = d.plot.predict, fill = ribcol[1])+
-  geom_ribbon(aes(x = hhfreq, ymin = pred_mean0.25, ymax = pred_mean0.75), data = d.plot.predict, fill = ribcol[2])+
-  geom_point(aes(x = hhfreq, y = `50%`, color = trial.names,  size = 1/(`90%` - `10%`)), data = df.trial) +
-  geom_line(aes(x = hhfreq, y = pred_mean0.5), data = d.plot.predict, color='grey40') +
-  scale_color_manual(values = cols) +
-  scale_shape_manual(values = c(19, 1, 10, 3), label = c('Control', 'Hand hygiene', 'Hand hygiene and mask', 'Mask')) + 
-  scale_y_continuous(limits = c(0, 0.02)) + 
-  scale_x_continuous(limits = c(0, 18))+ 
-  scale_size(guide = 'none')+
+  geom_ribbon(aes(x = dur, ymin = pred_mean0.1, ymax = pred_mean0.9), data = d.plot.predict, fill = ribcol[1])+
+  geom_ribbon(aes(x = dur, ymin = pred_mean0.25, ymax = pred_mean0.75), data = d.plot.predict, fill = ribcol[2])+
+  geom_point(aes(x = dur, y = `50%`, size = 1/(`90%` - `10%`)), data = df.trial) +
+  geom_line(aes(x = dur, y = pred_mean0.5), data = d.plot.predict, color='grey40') +
+  scale_y_continuous(limits = c(0, 10)) + 
+  scale_x_continuous(limits = c(0, 14)) + 
+  scale_size(guide = 'none') +
   ylab('Daily probability of infection') + 
-  xlab('Hand hygiene frequency per day') + 
-  theme_minimal()+
+  xlab('Antibiotic duration') + 
+  theme_minimal() +
   theme(legend.position = 'bottom', 
-        legend.title = element_blank())+
+        legend.title = element_blank()) +
   guides(color = guide_legend(nrow = 1))
 
 # save plot
-ggsave(paste0('../../../../Desktop/dose_response_COVIDHH.jpeg'), units = 'cm', width = 30, height= 15)
+ggsave(paste0('dose_response_COVIDHH.jpeg'), units = 'cm', width = 30, height= 15)
 
