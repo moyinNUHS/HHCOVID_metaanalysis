@@ -1,4 +1,4 @@
-fit0.9<-readRDS("fit0.9_5k.RDS")
+fit0.9<-readRDS("archive/fit0.9_5k_main.RDS")
 library(ggplot2); library(reshape); library(bayesplot); library(ggpubr); library(rstan)
 study_names = c("Aiello 2012", "Simmerman 2011", "Larson 2010", "Nicholson 2014", "Suess 2012", "Pandejpong 2012")
 p1<-NULL

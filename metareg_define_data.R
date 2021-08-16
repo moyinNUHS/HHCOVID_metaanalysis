@@ -20,8 +20,8 @@ study_names_short <- c("Aiello","Simmerman","Larson","Nicholson","Suess","Pandje
 baseline_hand_washing_freq <- 4 # baseline number of handwashes in control groups or in addition to 
 #                                 reported hand hygiene frequencies when intervention is alcohol hand 
 #                                 rub (based on Simmerman) - use 6 instead of 4 in sensitivity analysis 1
-assumed_mask_hrs <- 2           # number of mask hours per day if number of masks instead of number of hours 
-#                                 of mask use reported 
+assumed_mask_hrs <- 4           # number of mask hours per day if number of masks instead of number of hours 
+#                                 of mask use reported - use 4 instead of 2 in sensitivity analysis 2
 soap_per_handwash <- 0.35       # Nicholson - reported volume of bar soap use, assume 0.35g per wash
 #                                 Based on: https://blogs.scientificamerican.com/plugged-in/the-benefits-of-a-bar-of-soap-that-is/
 #                                           https://www.mcgill.ca/oss/article/health/liquid-or-bar-soapy-tales
@@ -36,7 +36,7 @@ Aiello_hw_per_day_control <- 5.93 + 1.51
 Aiello_hw_per_day_arm2 <- 5.81 + 1.29     # mask arm (Hand washing events + Hand sanitzer events)
 Aiello_hw_per_day_arm3 <- 5.58 + 4.49     # mask + hand hygiene arm (Hand washing events + Hand sanitzer events)
 
-Aiello_maskhrs_per_day_control <- 0       # assume no mask worn in control group (assume 4 in sensitivity analysis 2)
+Aiello_maskhrs_per_day_control <- 0       # assume no mask worn in control group 
 Aiello_maskhrs_per_day_arm2 <- 5.04       # mask arm
 Aiello_maskhrs_per_day_arm3 <- 5.08       # mask + hand hygiene arm
 
@@ -45,7 +45,7 @@ Simmerman_hw_per_day_control <- 3.9
 Simmerman_hw_per_day_arm2 <- 4.7          # hand hygiene arm  
 Simmerman_hw_per_day_arm3 <- 4.9          # mask + hand hygiene arm
 
-Simmerman_maskhrs_per_day_control <- 0    # assume no mask worn in control group (assume 4 in sensitivity analysis 2)
+Simmerman_maskhrs_per_day_control <- 0    # assume no mask worn in control group 
 Simmerman_maskhrs_per_day_arm2 <- 0       # assume no mask worn in hand hygiene group 
 Simmerman_maskhrs_per_day_arm3 <- 211/60  # mask + hand hygiene arm (211 min)
 
@@ -54,7 +54,7 @@ Larson_hw_per_day_control <- baseline_hand_washing_freq                       # 
 Larson_hw_per_day_arm2 <- (343.8/30)/ml_per_wash + baseline_hand_washing_freq # hand hygiene arm: 343.8ml alcohol used per month 
 Larson_hw_per_day_arm3 <- (329.6/30)/ml_per_wash + baseline_hand_washing_freq # mask + hand hygiene arm: 329.6ml alcohol used per month 
 
-Larson_maskhrs_per_day_control <- 0               # assume no mask worn in control group (assume 4 in sensitivity analysis 2)
+Larson_maskhrs_per_day_control <- 0               # assume no mask worn in control group 
 Larson_maskhrs_per_day_arm2 <- 0                  # assume no mask worn in hand hygiene group 
 Larson_maskhrs_per_day_arm3 <- assumed_mask_hrs   # masks only worn for those who developed symptoms;
 #                                                   only half (22/44) of the households with an ILI reported using masks 
@@ -80,7 +80,7 @@ Suess_hw_per_day_control <- 1 + baseline_hand_washing_freq
 Suess_hw_per_day_arm2 <- 4 + baseline_hand_washing_freq
 Suess_hw_per_day_arm3 <- 4 + baseline_hand_washing_freq
 
-Suess_maskhrs_per_day_control <- 0 
+Suess_maskhrs_per_day_control <- 0                             # assume no mask worn in control group 
 Suess_maskhrs_per_day_arm2 <- 4.2
 Suess_maskhrs_per_day_arm3 <- 3.6
 

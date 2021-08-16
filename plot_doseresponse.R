@@ -2,14 +2,14 @@
 # Plot dose-response curve from model output 
 # ========================================== #
 
-rm(list=ls()) # clear environment
+rm(list = ls()) # clear environment
 library(ggplot2); library(rstan) # load required libraries 
 
 ##############
 # Get data for plot
 
-# outputs from stan model - main analysis 
-fit0.9 = readRDS("runs/fit0.9_5k_main.RDS")
+# outputs from stan model - main analysis (loads object mod_fit)
+load("runs/fit0.9b_main.Rdata")
 
 # parameter names 
 source('metareg_define_data.R') # Get hand hygiene frequency from data 
@@ -17,13 +17,13 @@ params.trial = c("a0", "c0", "b0",
                  "a[1]","a[2]","a[3]","a[4]","a[5]","a[6]",
                  "b[1]","b[2]","b[3]","b[4]","b[5]","b[6]",
                  "c[1]","c[2]","c[3]","c[4]","c[5]", 
-                 "OR_masks", "OR_handwashing")
+                 "RR_masks", "RR_handwashing")
 p1 = NULL
 for(i in 1:20) p1<-c(p1, paste0("predicted_mean[", i, "]") ) # means of the parameters 
 params = c(params.trial, p1)
 
 # posterior values from stan model output 
-d = rstan::extract(fit0.9, pars = params)
+d = rstan::extract(mod_fit, pars = params)
 
 ##############
 # Prepare posterior values into dataframe for ggplot 
@@ -82,20 +82,21 @@ ribcol = c(alpha('grey', 0.3),
            alpha('grey', 0.6))
 # plot
 ggplot() + 
-  geom_ribbon(aes(x = dur, ymin = pred_mean0.1, ymax = pred_mean0.9), data = d.plot.predict, fill = ribcol[1])+
-  geom_ribbon(aes(x = dur, ymin = pred_mean0.25, ymax = pred_mean0.75), data = d.plot.predict, fill = ribcol[2])+
-  geom_point(aes(x = dur, y = `50%`, size = 1/(`90%` - `10%`)), data = df.trial) +
-  geom_line(aes(x = dur, y = pred_mean0.5), data = d.plot.predict, color='grey40') +
-  scale_y_continuous(limits = c(0, 10)) + 
-  scale_x_continuous(limits = c(0, 14)) + 
+  geom_ribbon(aes(x = hhfreq, ymin = pred_mean0.1, ymax = pred_mean0.9), data = d.plot.predict, fill = ribcol[1])+
+  geom_ribbon(aes(x = hhfreq, ymin = pred_mean0.25, ymax = pred_mean0.75), data = d.plot.predict, fill = ribcol[2])+
+  geom_point(aes(x = hhfreq, y = `50%`, size = 1/(`90%` - `10%`), color = trial.names), data = df.trial) +
+  geom_line(aes(x = hhfreq, y = pred_mean0.5), data = d.plot.predict, color='grey40') +
+  scale_y_continuous(limits = c(0, 0.02)) + 
+  scale_x_continuous(limits = c(0, 19)) + 
   scale_size(guide = 'none') +
   ylab('Daily probability of infection') + 
-  xlab('Antibiotic duration') + 
+  xlab('Hand hygiene frequency per day') + 
   theme_minimal() +
   theme(legend.position = 'bottom', 
-        legend.title = element_blank()) +
+        legend.title = element_blank(), 
+        text = element_text(size = 15)) +
   guides(color = guide_legend(nrow = 1))
 
 # save plot
-ggsave(paste0('dose_response_COVIDHH.jpeg'), units = 'cm', width = 30, height= 15)
+ggsave('~/Documents/nBox/COVID/Hand_hygiene_covid/graphics/dose_response_COVIDHH.jpg', units = 'cm', width = 30, height= 15)
 
