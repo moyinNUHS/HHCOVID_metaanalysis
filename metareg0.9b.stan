@@ -153,9 +153,9 @@ model {
   cases[6,2] ~ poisson(pdaysatrisk_arm1[6]*p6_2);
   cases[6,3] ~ poisson(pdaysatrisk_arm1[6]*p6_3);
   
-  a0 ~ normal(0, 10);
-  b0 ~ normal(0, 10);
-  c0 ~ normal(0, 10);
+  a0 ~ normal(0, 5);
+  b0 ~ normal(0, 5);
+  c0 ~ normal(0, 5);
   
   a ~ normal(a0, sigmasq_a );
   b ~ normal(b0, sigmasq_b );

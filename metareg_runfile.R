@@ -5,7 +5,7 @@
 library(rstan)
 source('metareg_define_data.R')
 
-fit0.9_sens2 <- stan(
+fit0.9_sens3 <- stan(
   file = "metareg0.9b.stan",   # Input model version here 
   data = hh_trial_data,        # named list of data defined in metareg_define_data.R
   chains = 4,                  # number of Markov chains
@@ -16,8 +16,8 @@ fit0.9_sens2 <- stan(
   control = list(max_treedepth = 15, adapt_delta=0.99)
 )
 
-mod_fit = fit0.9_sens2 # change this to the model ran
-suffix = 'sens2'
+mod_fit = fit0.9_sens3 # change this to the model ran
+suffix = 'sens3'
 
 #####################
 # Save

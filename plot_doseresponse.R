@@ -55,7 +55,7 @@ df.trial$trial.names = c(rep('Aiello', 3),  # trial names (to determine color of
                          rep('Larson', 3),
                          rep('Nicholson', 2),
                          rep('Suess', 3),
-                         rep('Pandejong', 3))
+                         rep('Pandejpong', 3))
 df.trial$trial.arms = as.factor(c('Control', 'Mask', 'HH and mask', # trial names (to determine borders of the bubbles)
                                   'Control', 'HH', 'HH and mask', 
                                   'Control', 'HH', 'HH and mask', 
